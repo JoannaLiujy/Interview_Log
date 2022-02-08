@@ -35,11 +35,17 @@
   > 数组：是特殊的对象数据类型
 
   ##### 谷歌67增加：BigInt 是一种内置对象，它提供了一种方法来表示大于 2^53 - 1 的整数。这原本是Javascript中可以用Number表示的最大数字。BigInt可以表示任意大的整数。不能用于 Math 对象中的方法；不能和任何 Number 实例混合运算，两者必须转换成同一种类型。在两种类型来回转换时要小心，因为 BigInt 变量在转换成 Number 变量时可能会丢失精度
- 
-  typeof:number,string,function,object,boolean,undefined,symbol
 
 ### 2.JavaScript的堆栈底层机制
+  - 基本类型：按值操作（直接操作的是值），所以也叫作值类型
+  - 引用类型：操作的是堆内存的地址（按引用地址操作的）
 
 
-
-### 3.
+### 3.Js中的数据类型检测
+  > - typeof：用来监测数据类型的运算符；
+  > - instanceof：用来检测当前实例是否属于某个类
+  > - constructor：基于构造函数检测数据类型（也是基于类的方式）
+  > - Object.prototype.toString.call()：监测数据类型最好的方法
+  
+  - typeof [val]:number,string,function,object,boolean,undefined,symbol
+  - instanceof
