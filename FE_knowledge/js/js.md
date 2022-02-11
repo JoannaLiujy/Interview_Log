@@ -223,8 +223,64 @@
 
 
 ### 4.浏览器底层渲染原理
+> 详见imgs中的图片：浏览器渲染.png、重绘和回流.png
 
 - 遇到link/img/audio/video等是异步去加载资源信息（浏览器分配在一个新的线程去加载，主线程继续向下渲染页面）
 - 遇到的是script或者@import，则让主线程去加载资源信息（同步），加载完成信息后，再去继续渲染页面
 
-![Alt text](https://github.com/JoannaLiujy/Interview_Log/blob/master/FE_knowledge/js/imgs/Painting_Layout.jpg)
+#### 性能优化
+> 详见imgs中的图片：优化重绘和回流.png、优化重绘和回流1.png、优化重绘和回流2.png、
+1. DOM操作的读写分离
+```
+//=>现代版浏览器都有“渲染队列”机制：发现某一行要修改元素的样式，不立即渲染，而是看看下一行，如果下一行也会改变样式，则把修改样式的操作放到“渲染队列中”...一直到不在是修改样式的操作后，整体渲染一次，引发一次回流。
+
+box.style.width = ' l00px'; 
+box.style.height = ' l00px'; 
+box.style.background = 'red' ; 
+box.style.margln = '200px auto' ;
+
+console.log(box.offsetWidth);
+console.log(box.offsetHeight);
+```
+2. 样式集中改变
+
+## 三、面向对象（oop）和this处理
+
+### 1.This
+> 函数执行的主体（不是上下文）：意思是谁把函数执行的，那么执行主体就是谁
+> THIS非常的不好理解，以后遇到THIS，想一句话："你以为你以为的就是你以为的"
+
+1. 给元素的某个事件绑定方法，当事件触发方法执行的时候，方法中的this是当前操作的元素本身
+2. 如何确定执行主体(this)是谁？当方法执行的时候我们看方法前面是否有点，没有点是window或undefined，有点，点前面的是谁this就是谁
+```
+var name = 'maus';
+function fn(){
+  console.log(this.name);
+}
+var obj = {
+  name:'hallo！',
+  fn:fn
+}
+obj.fn();
+fn(); // this:window(非严格模式，严格模式下是undefined)
+
+(function(){
+  // 自执行函数中的this是window或undefined
+})();
+```
+```
+//=>hasOwnProperty方法中的this：ary.__proto__.__proto__
+ary.__proto__.__proto__.hasOwnProperty();
+
+let obj = {
+  fn : (function(n){
+    // 把自执行函数执行的返回结果赋值给fn
+    // this:window
+    return function(){
+      //=>fn等于这个返回的函数
+      // this:obj
+    }
+  })(10)
+}
+obj.fn();
+```
