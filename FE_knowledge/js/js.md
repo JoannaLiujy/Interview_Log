@@ -227,3 +227,4 @@
 - 遇到link/img/audio/video等是异步去加载资源信息（浏览器分配在一个新的线程去加载，主线程继续向下渲染页面）
 - 遇到的是script或者@import，则让主线程去加载资源信息（同步），加载完成信息后，再去继续渲染页面
 
+![Alt text](https://github.com/JoannaLiujy/Interview_Log/blob/master/FE_knowledge/js/imgs/Painting_Layout.png)
