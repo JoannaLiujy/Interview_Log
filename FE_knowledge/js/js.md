@@ -318,3 +318,34 @@ console.log(test()); // language
 ### 2.面向对象（oop）
 
 #### （1）单例设计模式
+> 把描述当前事物特征的信息进行分组归类（减少全局变量的污染）
+> 作用：把描述事物的信息放到一个命名空间中进行归组，防止全局变量的污染
+
+```
+//简单的单例模式，其实就是对象
+let girl = {
+  name : 'maus',
+  sex : 'female',
+  age : 18
+}
+let boy = {
+  name : 'bar',
+  sex : 'male',
+  age :20
+}
+
+```
+```
+// 真实项目中的单例模式:用闭包的模式保护起来
+let namespace = (function(){
+  let fn = function(){
+    // ...
+  };
+  return {
+    name : 'xxx',
+    fun : fn
+  }
+})();
+console.log(namespace.name);
+namespace.fun();
+```
