@@ -349,3 +349,22 @@ let namespace = (function(){
 console.log(namespace.name);
 namespace.fun();
 ```
+
+#### （2）工厂设计模式
+> 底层思想：封装（即函数）；它的作用就是批量化生产，即把某个功能的代码进行封装，后期在想实现这个功能，直接执行函数即可
+> 低耦合：减少页面中冗余的代码  高内聚：提高代码的重复使用率
+
+```
+function createPerson(name,age){
+  let person = {};
+  person.name = name;
+  person.age = age;
+  return person;
+}
+let girl = createPerson('a',18);
+let boy = createPerson('b',29);
+console.log(girl.name);
+console.log(boy.age);
+```
+
+#### （3）**面向对象**
