@@ -368,3 +368,23 @@ console.log(boy.age);
 ```
 
 #### （3）**面向对象**
+
+#### （4）构造函数执行的基础操作
+> 浏览器会默认创建一个对象数据类型的值（就是一个堆，这个对数据就是累的一个实例），让函数体中的this指向这个对象。在函数最后，会默认增加return返回值，将这个实例的地址返回给变量。
+
+```
+function CreatePerson(name,age){
+  this.name = name;
+  this.age = age;
+  // return 100; //=>返回的还是实例
+  // return {
+   //  xxx:'xxx'
+  // }; //=>如果手动去return基本类型，无影响，若return了一个引用类型的值，就会把默认返回的实例给替换掉（所以在构造函数模式执行下，我们一般都不要手动写return）
+}
+let person1 = new CreatePerson('a',19);
+console.log(person1);
+/**
+ * new CreatePerson()执行和普通函数执行的联系
+ *    1．new这种执行方式叫做“构造函数执行模式”，此时的CreatePerson不仅仅是一个函数名，被称为“类”，而返回的结果（赋值给personl的〕是一个对象，我们称之为“实例”，而函数体中出现的this都是这个实例。
+ */
+```
