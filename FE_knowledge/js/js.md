@@ -7,7 +7,7 @@
   > Number()转换字符串：只有数字的转为数字，带其他字符的转为NaN，空字符串转为0
   - 布尔转数字：true：1、false:0
   - null:0
-  - undefined:NaN
+  - **undefined:NaN**
   - 对象：普通对象转为NaN，数组对象：空数组转为0（先基于toString转为字符串然后再转为数字）
   > parseInt/parseFloat([val],[进制])；对于字符串，从左到右依次查找有效数字字符，直到遇到非有效数字字符，停止查找，并把找到的当数字返回。
 
@@ -42,11 +42,15 @@
   > - constructor：基于构造函数检测数据类型（也是基于类的方式）
   > - Object.prototype.toString.call()：监测数据类型最好的方法
 
-  - typeof [val]:返回的是字符串；可以检测下面的类型：number,string,function,object,boolean,undefined,symbol；
+  1. typeof [val]:返回的是字符串；可以检测下面的类型：number,string,function,object,boolean,undefined,symbol；
     - typeof null => 'object' 
     - 无法细分出当前值是普通对象还是数组对象，只要是对象就会返回object
-  - instanceof
-
+  2. instanceof： 实例 instanceof 类 【属于：true；不属于：false】
+    - 要求检测的实例必须是对象数据类型的，不可以检测基本类型。
+    - **基本数据类型的特殊性：**1.一定是自己所属类的实例 2.但是不一定是对象数据类型的
+  3. constructor：
+    - 可以通过constructor来判断数据的类型，但是除了null、undefined，因为他们不是由对象构建。
+    - 数字、布尔值、字符串是包装类对象，所以有constructor
 
 ### 3.函数
   > 函数就是一个方法或者一个功能体，就是把实现某个功能的代码放到一起进行封装，以后想要操作实现这个功能，只需要把函数执行即可=》“封装”；减少页面中的冗余代码，提高代码重复使用率（低耦合高内聚）
@@ -371,7 +375,8 @@ console.log(boy.age);
 
 #### （4）构造函数执行的基础操作
 > 浏览器会默认创建一个对象数据类型的值（就是一个堆，这个对数据就是累的一个实例），让函数体中的this指向这个对象。在函数最后，会默认增加return返回值，将这个实例的地址返回给变量。
-
+> new方式可以构建类和实例：类是**函数数据类型**，实例是**对象数据类型**
+> new的时候不论是否加小括号，都相当于把Fn执行了，也创建了对应的实例，只不过不加小括号是不能传递实参的，不传又没有默认值，则传undefined
 ```
 function CreatePerson(name,age){
   this.name = name;
