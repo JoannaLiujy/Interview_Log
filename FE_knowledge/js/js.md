@@ -295,6 +295,7 @@ document.body.onclick = function(){
 }
 ```
 ##### 练习题
+1. 
 ```
 var fullName = 'language';
 var obj = {
@@ -309,3 +310,11 @@ console.log(obj.prop.getFullName()); // undefined
 var test = obj.prop.getFullName; 
 console.log(test()); // language
 ```
+2. 
+```
+// 见图片 imgs\this指针练习题.png 
+// 答案：22 23 65 30
+```
+### 2.面向对象（oop）
+
+#### （1）单例设计模式
