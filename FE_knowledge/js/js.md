@@ -371,9 +371,7 @@ console.log(girl.name);
 console.log(boy.age);
 ```
 
-#### （3）**面向对象**
-
-#### （4）构造函数执行的基础操作
+#### （3）构造函数执行的基础操作
 > 浏览器会默认创建一个对象数据类型的值（就是一个堆，这个对数据就是累的一个实例），让函数体中的this指向这个对象。在函数最后，会默认增加return返回值，将这个实例的地址返回给变量。
 > new方式可以构建类和实例：类是**函数数据类型**，实例是**对象数据类型**
 > new的时候不论是否加小括号，都相当于把Fn执行了，也创建了对应的实例，只不过不加小括号是不能传递实参的，不传又没有默认值，则传undefined
@@ -392,4 +390,50 @@ console.log(person1);
  * new CreatePerson()执行和普通函数执行的联系
  *    1．new这种执行方式叫做“构造函数执行模式”，此时的CreatePerson不仅仅是一个函数名，被称为“类”，而返回的结果（赋值给personl的〕是一个对象，我们称之为“实例”，而函数体中出现的this都是这个实例。
  */
+```
+#### （4）原型链设计模式
+1. 每一个函数数据类型的值都有一个天生自带的属性：prototype，这个属性的属性值是一个对象（用来存储实例共用的属性和方法）
+  - 普通的函数
+  - 类（自定义类和内置类）
+2. 在prototype这个对象中，有一个天生自带的属性：constructor，这个属性存储的是当前函数本身
+```
+Fn.prototype.constructor === Fn
+```
+3. 每一个对象数据类型的值，也有一个天生自带的属性：**__proto__**，这个属性指向“所属类的原型prototype”
+  - 普通对象、数组、正则、Math、日期、类数组等等
+  - 实例也是对象数据类型的值
+  - 函数的原型prototype属性的值也是对象类型的
+  - 函数也是对象类型的值
+
+##### 元素的原型链机制
+ > 为什么getElementById的上下文只能是document？
+
+ document的原型链：
+ document->HTMLDocument.prototype->Document.prototype（这里面有我们常用的方法：getElementById、createElement[只有document.prototype有这两种方法]...）->Node.prototype（appendChild、cloneNode...）->EventTarget.prototype（addEventListener...）->Object.prototype->null
+
+##### hasOwnProperty
+> ‘hasOwnProperty’：检测某一个属性名是否为当前对象的私有属性
+> ‘in’：检测这个属性是否属于某个对象（不管是私有属性还是公有属性，只要是他的属性，结果就为true）
+```
+//=> 自己堆里面有的就是私有属性，需要基于__proto__查找的就是共有属性（__proto__在IE浏览器（EDGE除外）中给保护起来了，不让我们在代码中操作他）
+let ary = [10,20,30];
+console.log('0' in ary); // true
+console.log('push' in ary); // true
+console.log(ary.hasOwnProperty('0')); // true
+console.log(ary.hasOwnProperty('push')); // false,因为他是共有的属性
+
+console.log(Array.prototype.hasOwnProperty('push')); // true 就是原型对象自己的，就是私有的
+console.log(Object.prototype.hasOwnProperty('hasOwnProperty')); // true 
+```
+> 基于内置类原型扩展方法 hasPubProperty
+```
+Object.prototype.hasPubProperty = function (property) {
+    if (!(['string', 'number', 'boolean'].includes(typeof property))) {
+        return false;
+    }
+    return property in this && !this.hasOwnProperty(property);
+}
+console.log(Array.prototype.hasPubProperty('push'));
+console.log([].hasPubProperty('push'));
+
 ```
