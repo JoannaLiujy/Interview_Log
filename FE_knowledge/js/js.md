@@ -443,6 +443,7 @@ console.log([].hasPubProperty('push'));
 3. 再基于原型链查找的方法确定结果即可
 
 ```
+//=>详见数组去重.js
 (function () {
   function myUnique() {
     let obj = {};
