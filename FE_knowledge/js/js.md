@@ -437,3 +437,33 @@ console.log(Array.prototype.hasPubProperty('push'));
 console.log([].hasPubProperty('push'));
 
 ```
+#### （5）面向对象中有关私有/公有方法中的THIS问题
+1. 方法执行，看前面是否有点，点前面是谁，this就是谁
+2. 把方法总的this进行替换
+3. 再基于原型链查找的方法确定结果即可
+
+```
+(function () {
+  function myUnique() {
+    let obj = {};
+    for (let i = 0; i < this.length; i++) {
+
+      let item = this[i];
+      if (typeof obj[item] !== 'undefined') {//=》undefined一定是字符串
+        this[i] = this[this.length - 1];//=>length一定要加上this，否则就不是该数组的了
+        this.length--;
+        i--;//=>要在length减完后i相应减一
+        continue;
+      }
+      obj[item] = item;
+    }
+    obj = null;
+    return this;
+  }
+  Array.prototype.myUnique = myUnique; //=>不能加括号
+})();
+let ary = [12, 24, 42, 73, 14, 64, 12, 42];
+ary.myUnique();
+console.log(ary);
+
+```
