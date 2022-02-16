@@ -488,5 +488,34 @@ console.log(ary);
     > 特点：CHILD方法中把PARENT当做普通函数执行，让PARENT中的THIS指向CHILD的实例，相当于给CHILD的实例设置了很多私有的属性或者方法
     > 1. 只能继承父类私有的属性或者方法（因为是把PARENT当做普通函数执行，和其原型上的属性和方法没有关系）
     > 2. 父类私有的变为子类私有的，若想让父类公有变为子类公有，需要使用寄生组合继承
-  - 方案三：寄生组合继承
+  - 方案三：寄生组合继承（没有es6的情况下）
     > 详情见 寄生组合继承.png
+    > CALL继承+类似于原型继承
+    > 特点：父类私有和共有的分别是子类实例的私有和共有属性方法
+  
+  - 方案四：es6中的继承
+    ```
+    //=> ES6基于class创造出来的类不能当做普通函数执行
+    class A{
+      constructor(x){
+        this.x = x;
+      }
+      getX(){
+        console.log(this.x);
+      }
+    }
+    //=>ES6中的继承：class CHILD extends PARENT{} 相当于B.prototype.__proto__ = A.prototype
+    class B extends A{
+      constructor(y){
+        //=>子类只要继承父类，可以不写constructor，一旦写了，必须在第一句话写上super()
+        super(200); //=>相当于A.call(this,200),把弗雷昂做普通方法执行，给方法传递参数，让方法中的this是子类的实例
+        // 不写constructor，浏览器回自己默认创建constructor(...args){super(...args)}
+        this.y = y;
+      }
+      getY(){
+        console.log(this.y);
+      }
+    }
+    let b = new B(100);
+    console.log(B);
+    ```
