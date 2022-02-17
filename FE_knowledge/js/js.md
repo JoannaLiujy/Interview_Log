@@ -655,6 +655,9 @@ function offset(curEle){
 
 ```
 3. scroll
+> box.scrollTop //竖向滚动条卷曲的高度
+> box.scrollLeft // 横向滚动条卷曲的宽度
+> **唯一一组可以设置的属性，其他的都是只读的**
 ```
 // scroll
 let box = document.getElementByld('box');
@@ -666,6 +669,7 @@ let box = document.getElementByld('box');
 box.scrollWidth
 box.scrollHeight
 //边界值：min=0；max=整个的高度scrollHeight - 一屏高度clientHeight
+
 box.scrollTop //竖向滚动条卷曲的高度
 box.scrollLeft // 横向滚动条卷曲的宽度
 
