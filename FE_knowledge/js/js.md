@@ -737,7 +737,7 @@ box.style.top = (heightH - box.style.height) / 2 + 'px';
 <div id='box' class='box'>aaa</div>
 ```
 ### 5.jQuery
->一款伟大的，用原生JS封装的，'操作DOM”的类库：它里面封装了大量的方法（在原先的版本中vl.xxx ,这些方法兼容所有的浏览器），基于这些方法我们可以快速的进行DOM操作和项目开发。
+> 一款伟大的，用原生JS封装的，'操作DOM”的类库：它里面封装了大量的方法（在原先的版本中vl.xxx ,这些方法兼容所有的浏览器），基于这些方法我们可以快速的进行DOM操作和项目开发。
 
 1. 如何学习JQ
 - 看API文档
@@ -757,3 +757,60 @@ http://jauery.cuishifeng.cn/
 主要是为移动端的开发准备的，不再兼容低版本浏览器（例如：IE8及以下），配合出现的还有jQuery mobile等UI库。但是，第二代版本在移动端方面的处理不如Zepto.js 
 - v3.xxx第三代版本
 也不再兼容IE低版本浏览器了，它从性能等方面都要比之前的强，但是生不逢时，此时正好是angular/雉/react这种框架崛起的时代，大家已经不再基于操作DOM的思想开发了，JQ也就慢慢退出舞台了
+
+### 6.DOM事件模型
+#### （1）事件和事件绑定
+> **事件**：元素天生自带的默认行为。不论我们是否给其绑定了方法，当我们操作的时候，也会把对应的事件触发
+> **事件绑定**：给元素的某个行为绑定一个方法。目的是当事件行为触发的时候，可以做一些事情
+```
+[鼠标事件］
+  click点击（移动端click被识别为单击）
+  dblclick 双击
+  mousedown鼠标按下
+  mouseup 鼠标抬起
+  mousemove鼠标移动
+  mouseover鼠标滑过
+  mouseout 鼠标滑出
+  mouseenter鼠标进入
+  mouseleave鼠标离开
+  mousewhell鼠标滚轮滚动
+［键盘事件］
+  keydown按下某个键
+  keyup抬起某个键
+  keypress除Shift/Fn/CapsLock键以外，其它键按住（连续触发）
+  //...
+```
+#### （2）DOM0事件绑定 VS DOM2事件绑定
+> DOM0事件绑定VS D0M2事件绑定
+- [DOM0]元素.on事件行为=function () {}
+- [DOM2]元素.addEventListener (事件行为，function (){},true/false);IE6~8中：元素.attachEvent( 'on事件行为',function(){})
+1. DOM0
+```
+/* DOM0事件绑定的原理：给元素的私有属性赋值，当事件触发，浏览器会帮我们把赋的值执行，但是这样也导致“只能给当前元素某一个事件行为绑定一个方法” */
+
+box.onclick = function(){
+  console.log('a');
+}
+box.onclick = function(){
+  console.log('b');
+}
+// 只输出b
+
+// 移除事件绑定：box.onclick = null;
+```
+2 DOM2
+```
+ /* D0M2事件绑定的原理：基于原型链查找机制，找到EventTarget.prototype上的方法并且执行，此方法执行，会把给当前元素某个事件行为绑定的所有方法，存放到浏览器默认的事件池中(绑定几个方法，会向事件池存储几个)，当事件行为触发，会把事件池中存储的对应方法，依次按照顺序执行“给当前元素某一个事件行为绑定就个不同方法” */
+  box.addEventListener('click', function () {
+    console.log('哈哈哈~~');
+  }, false);
+  box.addEventListener('click', function () {
+    console.log('呵呵呵~~ ');
+  }, false);
+
+  // 移除事件绑定：从时间池中移除，所以需要指定好事件类型、方法等信息（要和绑定的时候一样才可以移除）
+  // 基于addEventListener向事件池增加方法，存在去重的机制，“同一个元素，同一个事件类型，在事件池中只能存储一遍这个方法，不能重复存储”
+  box.addEventListener('click',fn,false);
+  box.removeEventListener('click',fn,false);
+```
+> 
