@@ -519,3 +519,151 @@ console.log(ary);
     let b = new B(100);
     console.log(B);
     ```
+
+## 三、js中的DOM操作
+> DOM:document object model 文档对象模型，提供系列的属性和方法，让我们能再js中操作页面中的元素
+
+### 1.获取元素的属性和方法
+```
+// 方法---------------------------------------
+document.getElementById([ID]);
+[context].getElementByTagName([TAGNAME]);
+[context].getElementByTClassName([CLASS-NAME]); // 在IE6-8中不兼容
+document.getElementByName([NAME]); // 在IE 浏览器中支队表单元素的NAME有作用
+[context].querySelector([SELECTOR]); // 在IE6-8中不兼容
+[context].querySelectorAll([SELECTOR]); // 在IE6-8中不兼容
+
+// 属性--------------------------------------
+document
+document.documentElement
+document.head
+document.body
+childNodes // 所有子节点
+children // 所有元素子节点，IE6-8中会把注释节点当做元素节点获取到
+parentNode
+firstChild / firstElementChild
+lastChild / lastElementChild
+previousSibling / previousElementSibling
+nextSibling / nextElementSibling
+//所有待Element的，在IE6-8都不兼容
+```
+### 2.DOM的增删改操作
+```
+document.createElement([TAG-NAME]);
+document.createTextNode([TEXT CONTENT])
+// 字符串拼接(模板字符串)，然后基于innerHTML/innerText存方到容器中
+
+[PARENT].appendchld([NEW-ELEMENT])
+[PARENT].insertBefore([NEw-ELEMENT],[ELEMENT])
+
+[ELEMENT].cloneNode([TRUE/FALSE])
+[PARENT].removechild([ELEMENT])
+
+//设置自定义属性
+[ELEMENT].xxx([ELEMENT].xxx);
+console.log([ELEMENT].xxx);
+
+[ELEMENT].setAttribute('xxx',xxx);
+console.log([ELEMENT].getAttribute('xxx'));
+[ELEMENT].removeAttribute('xxx');
+```
+### 3.获取元素样式和操作样式
+```
+//=>修改元素样式
+[ELEMENT].style.xxx = xxx // 修改和设置行内样式
+[ELEMENT].className = xxx // 设置样式类
+
+//=>获取元素的样式
+console.log([ELEMENT.style.xxx]);// 获取的是当前元素写在行内上的样式，如果有这个样式，但是没有写在行内上，则获取不到
+```
+
+### 4.盒子模型属性
+#### js盒子模型
+> 基于一些属性和方法，让我们能够获取到当前元素的样式信息，例如：clientWidth、offsetWidth等
+```
+-client
+。width / height
+。top / left
+-offset
+。width / height
+。top / left
+。parent
+-scroll
+。width / height
+。top / left
+
+```
+> 方法:window.getComputedStyle（ [ELEMENT],[伪类]） /[ELEMENT].currentStyle
+```
+let box = document.getElementByld('box');
+
+//=>获取盒子可视区域的宽高（内容宽度+左右PADDING） 
+//1.内容溢出与否对他无影响
+//2.获取的结果是没有单位的（其余的盒模型属性也是）
+//3. 获取的结果是整数，会自己进行四舍五入（其余的盒模型属性也是）
+box.clientWidth
+box.clientHeight
+box.clientTop //获取上边框大小
+box.clientLeft // 获取左边框大小
+
+widthGet = document.documentElement.clientWidth || document.body.clientWidth //获取一屏的宽度，高度同理
+```
+**居中**
+```
+let widthW = document.documentElement.clientWidth;
+let heightH = document.documentElement.clientHeight;
+let box = document.getElementById('box');
+box.style.position = 'absolute';
+box.style.left = (widthW - box.style.width) / 2 + 'px';
+box.style.top = (heightH - box.style.height) / 2 + 'px';
+
+
+<div id='box' class='box'>aaa</div>
+```
+#### css中的盒子模型
+> box-sizing:content-box(传统盒子模型，默认)；border-box(新盒子模型)
+> 传统盒子模型宽高= width/height +左右上下padding+左右上下border
+> 新盒子模型宽高= 左右border+左右padding+内容 = width/height
+**居中**
+- 定位方式:缺点是需要知道盒子的宽高
+```
+.box{
+  position:absolute;
+  top:50%;
+  left:50%;
+  margin-top:-150px;
+  margin-left:-150px;
+}
+<div id='box' class='box'>aaa</div>
+```
+- css3变形属性中的位移，在不知道宽高的情况下也能实现
+```
+.box{
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%，-50%)；
+}
+<div id='box' class='box'>aaa</div>
+```
+- 绝对定位的特点，但是这种方法兼容不好
+```
+.box{
+  position:absolute;
+  top:0;
+	left:0;
+	bottom:0;
+	right:0;
+	margin:auto;
+}
+<div id='box' class='box'>aaa</div>
+```
+- flex
+```
+.box{
+  display:flex;
+  aligh-items:center;
+  justify-content:center;
+}
+<div id='box' class='box'>aaa</div>
+```
