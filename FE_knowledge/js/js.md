@@ -851,11 +851,58 @@ box.onclick = function(event){
   }
 ```
 #### （4）事件的传播机制
-
->1. 捕获阶段：从最外层向最里层事件源依次进行查找（目的：视为冒泡阶段事先计算好传播的层级路径）=>CAPTURING_PHASE:1
+> 详见图片 事件传播机制.png
+> 1. 捕获阶段：从最外层向最里层事件源依次进行查找（目的：视为冒泡阶段事先计算好传播的层级路径）=>CAPTURING_PHASE:1
 > 2. 目标阶段：当前元素的相关事件行为触发=>AT_TARGET:2
 > 3. 冒泡传播：触发当前元素的某一个事件行为，不仅他的这个行为被触发了，而且他所有的祖先元素（一直到window）相关的事件行为都会被依次触发（从内到外的顺序）=>BUBBLING_PHASE:3（Event.prototype）
 ```
+.outer {
+    width: 300px;
+    height: 300px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: aquamarine;
+  }
+
+  .inner {
+    width: 200px;
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: bisque;
+  }
+
+  .center {
+    width: 100px;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgb(141, 45, 231);
+  }
+
+<div id="outer" class="outer">
+  <div id="inner" class="inner">
+    <div id="center" class="center"></div>
+  </div>
+</div>
+//-------js-----------------
+  document.body.onclick = function (e) {
+    console.log('body');
+  }
+  outer.addEventListener('click', function (e) {
+    console.log('outer');
+  }, true);
+  inner.addEventListener('click', function (e) {
+    console.log('inner');
+  }, false);
+  center.addEventListener('click', function (e) {
+    console.log('center');
+  }, false);
+//-----------------------------
 box.onclick = function(ev){
   ev.stopPropagation(); // 阻止冒泡
 }
