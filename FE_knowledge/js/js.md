@@ -795,7 +795,7 @@ http://jauery.cuishifeng.cn/
 **面试题:D0M2的事件池机制**
   1. addEventListener/attachEvent(IE6-8)向事件池中追加方法:新版本浏览器会根据元素和事件类型对新增的方法做重复校验，但是IE6~8不可以 I
   2. 当事件行为触发，会把事件池中的方法按照增加的顺序依次执行,但是IE6-8中执行的顺序是不固定的
-  
+
 > DOM0事件绑定VS D0M2事件绑定
 - [DOM0]元素.on事件行为=function () {}
 - [DOM2]元素.addEventListener (事件行为，function (){},true/false);IE6~8中：元素.attachEvent( 'on事件行为',function(){})
@@ -924,3 +924,52 @@ box.onclick = function(ev){
 ```
 ## 四、设计模式
 ### 1.发布订阅（publish-subscribe）
+> 基于ES6构建属于自己的发布订阅库
+```
+ let _subscribe = (function () {
+  class Sub {
+    constructor() {
+      this.pond = [];
+    }
+    add(fn) {
+      let flag = this.pond.some((ele) => {
+        return ele === fn;
+      });
+      !flag ? this.pond.push(fn) : null;
+    }
+    remove(fn) {
+      let pond = this.pond;
+      for (let i = 0; i < pond.length; i++) {
+        let item = pond[i];
+        if (item === fn) {
+          // 移除（顺序不变的情况下基本上只能使用splice），但是不能这样写，这样会导致数组塌陷问题，我们移除不能真的移除，只能把当前项赋值为null
+          // pond.splice(i, 1);
+          pond[i] = null;
+          break;
+        }
+      }
+    }
+    excute(...args) {
+      let pond = this.pond;
+      for (let i = 0; i < pond.length; i++) {
+        let item = pond[i];
+        // 真正的移除方法
+        if(typeof item !== 'function'){
+          pond.splice(i,1);
+          i--;
+        }
+
+        item.call(this, ...args);
+      }
+    }
+  };
+  return function subscribe() {
+    return new Sub();
+  }
+})();
+```
+**如果我们在某一个方法中移除了一个方法，就会出现数组塌陷的问题，数组塌陷产生的原因详见图片（数组塌陷.png），解决办法如下：**
+```
+
+
+```

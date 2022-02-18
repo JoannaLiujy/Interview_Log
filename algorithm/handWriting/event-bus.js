@@ -16,7 +16,7 @@ class EventBus {
       for (let callback of callbacks) {
         try {
           callback(...args)
-        } catch(e) {
+        } catch (e) {
           console.log(e);
         }
       }
