@@ -798,7 +798,7 @@ box.onclick = function(){
 
 // 移除事件绑定：box.onclick = null;
 ```
-2 DOM2
+2. DOM2
 ```
  /* D0M2事件绑定的原理：基于原型链查找机制，找到EventTarget.prototype上的方法并且执行，此方法执行，会把给当前元素某个事件行为绑定的所有方法，存放到浏览器默认的事件池中(绑定几个方法，会向事件池存储几个)，当事件行为触发，会把事件池中存储的对应方法，依次按照顺序执行“给当前元素某一个事件行为绑定就个不同方法” */
   box.addEventListener('click', function () {
@@ -813,4 +813,50 @@ box.onclick = function(){
   box.addEventListener('click',fn,false);
   box.removeEventListener('click',fn,false);
 ```
-> 
+> 当DOM0和DOM2混在一起用的时候：执行的顺序以绑定的顺序为主
+> DOM0能做的事件绑定，DOM2都支持；DOM2里面一些事件，DOM0不一定能处理，如：transitionend，DOMContentLoaded...
+
+#### （3）事件对象
+> 给元素的事件行为绑定方法，当事件行为触发方法会被执行，不仅被执行，而且还会把当前的操作的相关信息传递给这个函数 ===》“事件对象”
+> 如果是鼠标操作，获取的是MouseEvent类的实例=》鼠标事件对象（MouseEvent.prototype->UIEvent.prototype->Event.prototype->Object.prototype）
+> 如果是键盘操作，获取的是KeyboardEvent类的实例
+```
+box.onclick = function(event){
+  //clientX/clientY：当前鼠标触发点距离当前窗口左上角的X/Y轴坐标
+  //pageX/pageY：触发点距离当前页面左上角的X/Y轴坐标
+  //type：触发事件的类型
+  //target：事件源(操作的是哪个元素，哪个元素就是事件源)，在不兼容的浏览潜中可以使用srcElement获取，也代表的是事件源
+  //preventDefault()：用来阻止默认行为的方法，不兼容的浏览器中用ev.returnValue = false也可以阻止默认行为
+  //stopPropagation()：：阻止冒泡传播，不兼容的浏览器中用ev.cancelBubble=true也可以阻止默认行为
+
+  console.log(event);
+}
+```
+```
+/* 事件对象和函数以及给谁绑定的事件没啥必然关系，它存储的是当前本次操作的相关信息，操作一次只能有一份信息，所以在哪个方法中获取的信息都是一样的；第二次操作，存储的信息会把上一次操作存储的信息替换掉*/
+
+/* 每一次事件触发，浏览器都会这样处理一下
+ * 1 .捕获到当前操作的行为（把操作信息获取到），通过创建MouseEvent等类的实例，得到事件对象EV
+ * 2.通知所有绑定的方法（符合执行条件的）开始执行，并且把EV当做实参传递给每个方法，所以在每个方法中得到的事件对象其实是一个
+ * 3.后面再重新触发这个事件行为，会重新获取本次操作的信息，用新的信息替换老的信息，然后继续之前的步骤...
+ */
+  box.addEventListener('click', function (ev) {
+    console.log(ev);
+  });
+  box.addEventListener('click', function (ev) {
+    console.log(ev);
+  });
+  document.body.onclick = function (ev) {
+    console.log(ev);
+  }
+```
+#### （4）事件的传播机制
+
+>1. 捕获阶段：从最外层向最里层事件源依次进行查找（目的：视为冒泡阶段事先计算好传播的层级路径）=>CAPTURING_PHASE:1
+> 2. 目标阶段：当前元素的相关事件行为触发=>AT_TARGET:2
+> 3. 冒泡传播：触发当前元素的某一个事件行为，不仅他的这个行为被触发了，而且他所有的祖先元素（一直到window）相关的事件行为都会被依次触发（从内到外的顺序）=>BUBBLING_PHASE:3（Event.prototype）
+```
+box.onclick = function(ev){
+  ev.stopPropagation(); // 阻止冒泡
+}
+```
