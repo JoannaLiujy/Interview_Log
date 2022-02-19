@@ -213,13 +213,20 @@
 #### 箭头函数
   > 1. 简单：函数体中只有一行return代码时，直接省略return和大括号；形参赋值默认值（当没有给形参传递实参的时候，执行默认值） 
   > 2. 箭头函数没有arguments（类数组），但可以使用剩余运算符获取到实参集合（纯数组）  
+  > 3. 箭头函数不存在变量提升的情况，函数只能在创建完成后被执行（也就是创建的代码之后执行）
   ```
   let sum = (...arg) => {
     console.log(arg);
   }
   sum(10, 20, 30, 40);
+  //-----------------------
+  let sum(arg=0)=>{
+    console.log(arg);
+  }
+
   ```
-  > 3. this也便于操作
+  > 4. this也便于操作：箭头函数没有this，需要向上级作用域中去查找
+
 
 #### 柯里化函数
 > 预先处理的思想：利用闭包的机制
@@ -257,6 +264,8 @@ console.log(box.offsetHeight);
 1. 给元素的某个事件绑定方法，当事件触发方法执行的时候，方法中的this是当前操作的元素本身
 2. 如何确定执行主体(this)是谁？当方法执行的时候我们看方法前面是否有点，没有点是window或undefined，有点，点前面的是谁this就是谁
 3. 在构造函数模式执行中，函数体中的this是当前类的实例
+4. 可以通过call、apply、bind强制改变this的指向
+5. 遇到箭头函数，以上四条都是废话
 ```
 var name = 'maus';
 function fn(){
@@ -923,7 +932,7 @@ box.onclick = function(ev){
 }
 ```
 ## 四、设计模式
-### 1.发布订阅（publish-subscribe）
+### 发布订阅（publish-subscribe）
 > 基于ES6构建属于自己的发布订阅库
 ```
  let _subscribe = (function () {
@@ -970,3 +979,45 @@ box.onclick = function(ev){
 })();
 ```
 **如果我们在某一个方法中移除了一个方法，就会出现数组塌陷的问题，数组塌陷产生的原因详见图片（数组塌陷.png）**
+
+## 五、ES6核心知识
+> 1. let/var/const之间的区别
+> 2. 箭头函数以及this的指向问题
+> 3. ... 剩余运算符
+```
+// 1.拓展运算符（用在解构赋值中）
+let [n,...m] [12,35,94]
+// 2.展开运算符（用在传递实参中）
+let ary = [12,45,78,34,458,2];
+let min = Math.min(...ary);
+let cloneArray = [...ary]; //数组克隆（浅克隆）
+let obj = {name='a',age:14};
+let objClone = {...obj,sex:'f'};//对象克隆（浅克隆）
+// 3.剩余运算符（用于接受实参）
+let fn = (m,...args)=>{
+  console.log(m,args);
+}
+fn(10,25,174,36);
+```
+> 4. 解构赋值（对象、数组）
+> 5. class创建类
+```
+class Fn{
+  constructor(m,n){
+    this.x = m;
+  }
+  getX(){
+    console.log(this.x);
+  }
+  static queryX(){}
+  static z = 300;
+}
+let f = new Fn(10,20);
+//也可以在外面这样的写
+Fn.prototype.getY = function(){
+  cosole.log(this.y);
+}
+Fn.queryX();
+Fn();//报错，不可以当成普通函数去执行
+```
+> 6. 模板字符串
