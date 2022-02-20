@@ -1032,3 +1032,25 @@ Fn();//报错，不可以当成普通函数去执行
 
 - AJAX的并行
 > 多个请求可以同时发送，但是需要等到所有的请求都成功后才会做一件事
+
+#### Promise基础知识
+1. Executor
+```
+/**
+  * new Promise( [executor]):第一个执行函数必须传递
+  * [executor 简称EXE]
+  * l.NEW PROMISE的时候就会把EXE执行，创建PROMISE的一个实例(EXE是PROMISE类的一个回调函数，PROMISE内部会把它执行)
+  * 2.PROMISE不仅把EXE执行，而且还给EXE传递两个参数(两个参数也是函数类型)：
+  *   =>resolve函数：它执行代表PROMISE处理的异步事情是成功的，把PROMISE的状态改为fulfilled
+  *   =>reject函数：它执行代表PROMISE处理的异步事情是失败的，把PROMISE的状态改为rejected
+  * 3.EXE函数中放的就是当前要处理的异步操作事情
+  */
+  
+let promiseExamp = new Promise((resolve, reject) =>{
+  // 这里一般存放的都是我们即将要处理的异步任务，任务成功我们执行resolve，任务失败我们执行reject
+});
+```
+**PROMISE有三个状态**
+- pending :初始状态（NEWPROMIS诟的状态）
+- fulfilled :成功状态（在executor函数中把resolve执行,就是告知promise当前异步操作的结果是成功的）
+- rejected :失败状态（在executor函数中把reject执行,就是告知promise当前异步操作的结果是失败的）
