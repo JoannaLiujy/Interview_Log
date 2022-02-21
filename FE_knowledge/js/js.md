@@ -1071,3 +1071,52 @@ let promiseExamp = new Promise((resolve, reject) =>{
 5. 服务器得到并处理请求（HTTP响应内容）
 6. 客户端渲染服务器返回的内容
 7. 和服务器端断开TCP连接
+
+### 2.URI/URL/URN
+- URL (Uniform Resource Locator)：统一资源定位符，根据这个地址能找到对应的资源
+- URN (Uniform Resource Name)：统一资源名称，一般指国际上通用的(标准的)一些名字(例如:国际统一发版的编号)
+- URI (Uniform Resource Identifier)：统一资源标识符，URL和URN是URI的子集
+
+#### 一个完整的URL所包含的内容
+> http://www.mycompany.c:80/myfield/index.html?from=sfew&fds=gowehj"
+- 协议（http://）：传输协议就是，能够把客户端和服务器端通信的信息，进行传输的工具（类似于快递小哥）
+  + http 超文本传输协议，除了传递文本，还可以传递媒体资源文件（或者流文件）及XML格式数据
+  + https更加安全的http, 一般涉及支付的网站都要采用https协议（s:ssl加密传输）
+  + ftp文件传输协议（一般应用于把本地资源上传到服务器端）:FileZilla
+
+- 域名(www.mycompany.cn)一个让用户方便记忆的名字(不通过域名，直接用服务器的外网IP也能访问到服务器，但是外网IP很难被记住)
+  + 顶级域名qq.com
+  + 一级域名 www.qq.com
+  + 二级域名 sports.qq.com
+  + 三级域名 kbs.sports.qq.com
+  + .com国际域名
+  + .cn中文域名
+  + .com.cn
+  + .edu 教育
+  + .gov 政府
+  + .io 博客
+  + .org 官方组织
+  + .net 系统类
+
+- 端口号(:80): 端口号的取值范围0~65535,用端口号来区分同一台服务器上的不同项目
+  + http默认端口号：80
+  + https默认端口号：443
+  + ftp默认端口号：21
+  + 如果项目采用的就是默认端口号，我们在书写地址的时候，不用加端口号，浏览器在发送请求的时候会帮我们默认给加上
+  
+- 请求资源路径名称(/myfield/index.html)
+> 服务器接收到请求后: 1.根据端口号找到对应的项目2.根据清求资源的路径名称找到资源文件3.读取奥源文件中的内容4. 把内容返回
+  + 默认的路径或者名称（xxx.com/myfield/不指定资源名，服务器会找默认的资源，一般默认资源名是default.html、index.html. ..当然这些可以在服务器端自己配置）
+  + 注意伪URL地址的处理（URL重写技术是为了增加SE0搜索引擎优化的，动态的网址一般不能被搜索引擎收录，所以我们要把动态网址静态化，此时需要的是重写URL）
+  https://item.jd.hk/2688449.html => https://item.jd.hk/index.php?id=2688449
+
+- 问号传参信息(?from=sfew&fds=g#owehj)
+  + 客户端想把信息传递给服务器，有很多的方式
+  + URL地址问号传参
+  + 请求报文传输（请求头和请求主体）
+  + 也可以不同页面之间的信息交互，例如：从列表到详情
+
+- HASH值(#owehj)
+  + 也能充当信息传输的方式
+  + 锚点定位
+  + 用于HASH实现路由管控（不同的HASH值,展示不同的组件和模块）
