@@ -1079,6 +1079,7 @@ let promiseExamp = new Promise((resolve, reject) =>{
 
 #### 一个完整的URL所包含的内容
 > http://www.mycompany.c:80/myfield/index.html?from=sfew&fds=gowehj"
+
 - 协议（http://）：传输协议就是，能够把客户端和服务器端通信的信息，进行传输的工具（类似于快递小哥）
   + http 超文本传输协议，除了传递文本，还可以传递媒体资源文件（或者流文件）及XML格式数据
   + https更加安全的http, 一般涉及支付的网站都要采用https协议（s:ssl加密传输）
@@ -1120,3 +1121,16 @@ let promiseExamp = new Promise((resolve, reject) =>{
   + 也能充当信息传输的方式
   + 锚点定位
   + 用于HASH实现路由管控（不同的HASH值,展示不同的组件和模块）
+
+### 3.URL编码解析
+```
+  /**
+   * 
+   * 请求的地址中如果出现非有效UNICODE编码内容，现代版浏览器会默认的进行编码
+   * 1.基于encodeURI编码，我们可以基于decodeURI解码，我们一般用encodeURI编码的是整个URL,这样整个URL中的特殊字符都会自动编译
+   * 2. encodeURIComponent/decodeURIComponent它相对于encodeURI来说，不用于给整个URL编码，而是给URL部分信息进行编码（一般都是问号传参的值编码）
+   * 客户端和服务器端进行信息传输的时候，如果需要把请求的地址和信息编码，我们则基于以上两种方式处理，服务器端也存在这些方法，这样就可以统一编码解码了
+   * 3.客户端还存在一种方式，针对于中文的编码方式escape/unescape,这种方式一般只应用于客户端页面之间自己的处理，例如：从列表跳转到详情，我们可以把传递的中文信息基于这个编码，详情页获取编码后的信息再解码，再比如我们在客户端种的cookie信息，如果信息是中文，我们也基于这种办法编码...
+   */
+```
+### 4.DNS服务器域名解析
