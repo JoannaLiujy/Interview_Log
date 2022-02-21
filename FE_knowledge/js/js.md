@@ -1045,7 +1045,7 @@ Fn();//报错，不可以当成普通函数去执行
   *   =>reject函数：它执行代表PROMISE处理的异步事情是失败的，把PROMISE的状态改为rejected
   * 3.EXE函数中放的就是当前要处理的异步操作事情
   */
-  
+
 let promiseExamp = new Promise((resolve, reject) =>{
   // 这里一般存放的都是我们即将要处理的异步任务，任务成功我们执行resolve，任务失败我们执行reject
 });
@@ -1054,3 +1054,20 @@ let promiseExamp = new Promise((resolve, reject) =>{
 - pending :初始状态（NEWPROMIS诟的状态）
 - fulfilled :成功状态（在executor函数中把resolve执行,就是告知promise当前异步操作的结果是成功的）
 - rejected :失败状态（在executor函数中把reject执行,就是告知promise当前异步操作的结果是失败的）
+
+
+
+## 六、ajax和http前后端交互
+### 1.客户端和服务端交互的基本模型
+> 客户端：可以向服务器发请求，并接受返回的内容进行处理
+> 服务器端：能够接受客户端的请求，并且把相关资源信息返回给客户端的
+> 一共7步。详细见 客户端和服务器端交互模型.png
+- request请求阶段
+1. URL地址解析
+2. DNS域名解析
+3. 和服务器建立TCP连接
+4. 把客户端信息传递给服务器（发送HTTP请求）
+- response阶段
+5. 服务器得到并处理请求（HTTP响应内容）
+6. 客户端渲染服务器返回的内容
+7. 和服务器端断开TCP连接
