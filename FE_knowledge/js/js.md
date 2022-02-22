@@ -1054,7 +1054,7 @@ let promiseExamp = new Promise((resolve, reject) =>{
 - URI (Uniform Resource Identifier)：统一资源标识符，URL和URN是URI的子集
 
 #### 一个完整的URL所包含的内容
-> http://www.mycompany.c:80/myfield/index.html?from=sfew&fds=gowehj"
+> http://www.mycompany.cn:80/myfield/index.html?from=sfew&fds=gowehj"
 
 - 协议（http://）：传输协议就是，能够把客户端和服务器端通信的信息，进行传输的工具（类似于快递小哥）
   + http 超文本传输协议，除了传递文本，还可以传递媒体资源文件（或者流文件）及XML格式数据
