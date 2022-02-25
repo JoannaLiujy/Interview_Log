@@ -141,3 +141,16 @@ Animation和transition大部分属性是相同的，他们都是随时间改变�
 - PC端有兼容要求，宽高不固定，推荐css-table
 - PC端无兼容性要求，推荐flex
 - 移动端推荐使用flex
+
+
+#### 8.关于JS动画和css3动画的差异性
+> 渲染线程分为main thread和compositor thread，如果css动画只改变transform和opacity，这时整个CSS动画得以在compositor trhead完成（而JS动画则会在main thread执行，然后出发compositor thread进行下一步操作），特别注意的是如果改变transform和opacity是不会layout或者paint的。
+- 区别：
+  + css在复合线程上执行的，js动画是首先在主线程上面执行，然后再复合线程上去执行下一步操作。
+  + 功能涵盖面，JS比CSS大实现/重构难度不一
+  + CSS3比JS更加简单，性能跳优方向固定对帧速表现不好的低版本浏览器，css3可以做到自然降级
+  + css动画有天然事件支持
+  + css3有兼容性问题
+
+#### 9.说一下块元素和行元素
+- 块级元素
