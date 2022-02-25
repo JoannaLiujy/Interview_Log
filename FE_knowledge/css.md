@@ -41,3 +41,103 @@ Animation和transition大部分属性是相同的，他们都是随时间改变�
   + overflow不为visible的元素
 
 #### 7.垂直居中的方法
+```
+//->定位方式
+//1.
+.wp {
+    position: relative;
+}
+.box {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+//2.
+.wp {
+    position: relative;
+}
+.box {
+    position: absolute;;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+}
+//3.
+.wp {
+    position: relative;
+}
+.box {
+    position: absolute;;
+    top: 50%;
+    left: 50%;
+    margin-left: -50px;
+    margin-top: -50px;
+}
+
+```
+```
+//->lineheight
+<div class="wp">
+    <div class="box">123123</div>
+</div>
+.wp {
+    line-height: 300px;
+    text-align: center;
+    font-size: 0px;
+}
+.box {
+    font-size: 16px;
+    display: inline-block;
+    vertical-align: middle;
+    line-height: initial;
+    text-align: left; /* 修正文字 */
+}
+
+```
+```
+//->tble(html代码过分冗余，但是css很简单)
+<table>
+    <tbody>
+        <tr>
+            <td class="wp">
+                <div class="box">123123</div>
+            </td>
+        </tr>
+    </tbody>
+</table>
+.wp {
+    text-align: center;
+}
+.box {
+    display: inline-block;
+}
+
+```
+```
+//->css-table(兼容性很好)
+.wp {
+    display: table-cell;
+    text-align: center;
+    vertical-align: middle;
+}
+.box {
+    display: inline-block;
+}
+
+```
+```
+//->flex(需要考虑兼容性问题)
+.wp {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+```
+- PC端有兼容性要求，宽高固定，推荐absolute + 负margin
+- PC端有兼容要求，宽高不固定，推荐css-table
+- PC端无兼容性要求，推荐flex
+- 移动端推荐使用flex
