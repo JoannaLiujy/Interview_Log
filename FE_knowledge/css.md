@@ -31,8 +31,8 @@ Animation和transition大部分属性是相同的，他们都是随时间改变�
 
 #### 6.BFC（块级格式化上下文，用于清楚浮动，防止margin重叠等）
 > 直译成：块级格式化上下文，是一个独立的渲染区域，并且有一定的布局规则。BFC区域不会与float box重叠
-- BFC是页面上的一个独立容器，子元素不会影响到外面计算
-- BFC的高度时，浮动元素也会参与计算
+- BFC是页面上的一个独立容器，子元素不会影响到外面
+- 计算BFC的高度时，浮动元素也会参与计算
 - 哪些元素会生成BFC：
   + 根元素
   + float不为none的元素
@@ -153,4 +153,83 @@ Animation和transition大部分属性是相同的，他们都是随时间改变�
   + css3有兼容性问题
 
 #### 9.说一下块元素和行元素
-- 块级元素
+> 块元素：独占一行，并且有自动填满父元素，可以设置margin和pading以及高度和宽度
+- div p h1-h6 ul ol li form table header footer aside section
+> 行元素：不会独占一行，width和height会失效，并且在垂直方向的padding和margin会失效
+- span img a b q i button input label 
+
+#### 10.多行元素的文本省略号
+```
+/* 单行文本溢出显示省略号 */
+  .div1 p{
+    white-space: nowrap; /* 文本超过容器最大宽度不换行(若文本自动显示在一行则不需要这个属性) */
+    overflow: hidden;  /* 本文超出容器最大宽度的部分不显示 */
+    text-overflow: ellipsis;  /* 文本超出容器最大宽度时显示三个点 */
+  }
+ 
+/* 多行文本溢出显示省略符 */
+  .div2 p{
+    word-break: break-word; /* 文本默认显示在一行时，需要添加该属性，让超出的文本换行 */
+    overflow:hidden;
+    display:-webkit-box; /* 让容器变成一个弹性伸缩盒子 */
+    -webkit-line-clamp:2;  /* 最大显示的文本行数 */
+    -webkit-box-orient:vertical;  /* 设置或检索伸缩盒对象的子元素纵向排列  */
+}
+```
+
+#### 11.visibility=hidden, opacity=0，display:none
+- opacity=0，该元素隐藏起来了，但不会改变页面布局，并且，如果该元素已经绑定一些事件，如 click 事件，那么点击该区域，也能触发点击事件
+- visibility=hidden，该元素隐藏起来了，但不会改变页面布局，但是不会触发该元素已经绑定的事件
+- display=none，把元素隐藏起来，并且会改变页面布局，可以理解成在页面中把该元素删除掉一样
+
+#### 12.line-height和height的区别
+line-height 一般是指布局里面一段文字上下行之间的高度，是针对字体来设置的，height 一般是指容器的整体高度。
+
+#### 13.css预处理器有什么
+less，sass
+
+#### 14.双边距重叠问题
+1. 什么是双边距重叠
+多个相邻的（兄弟或者父子关系）标准流中的块元素垂直方向的margin会重叠。
+2. 折叠结果
+- 两个相邻的外边距都是正数的时候，折叠结果就是它们两者之间较大的值
+- 两个相邻的外边距都是负数的时候，折叠结果就是它们两者之间绝对值的较大值
+- 两个相邻的外边距一正一负的时候，折叠结果就是它们两者相加的和
+3. 如何解决双边距重叠
+- 给其中的一个div添加一个父的div，并且为这个div设置边框或者实现overflow：hidden；
+- 将块级div设置成行内div（display：inline-block；）
+
+#### 15.position属性比较
+- 固定定位fixed：元素的位置相对于浏览器窗口是固定位置，即使窗口是滚动的它也不会移动。
+  + Fixed定位使元素的位置与文档流无关，因此不占据空间。
+  + Fixed定位的元素和其他元素重叠。 
+- 相对定位relative：是在自己原来的基础上进行偏移。也就是相对于自己定位。使元素偏移，使用top,right,left,bottom进行偏移，用z-index分别层次。
+- 绝对定位absolute：绝对定位的元素的位置相对于最近的已定位父元素，如果元素没有已定位的父元素，那么它的位置相对于<html>。absolute定位使元素的位置与文档流无关，因此不占据空间。absolute定位的元素和其他元素重叠。
+- 粘性定位sticky：元素先按照普通文档流定位，然后相对于该元素在流中的flow root（BFC）和containing block（最近的块级祖先元素）定位。而后，元素定位表现为在跨越特定阈值前为相对定位，之后为固定定位。 
+- 默认定位Static：默认值。没有定位，元素出现在正常的流中（忽略top,bottom,left,right或者z-index 声明）。
+- inherit: 规定应该从父元素继承position属性的值。
+
+#### 16.浮动清除
+1. 方法一：使用带clear属性的空元素在浮动元素后使用一个空元素如<div class="clear"></div>，并在CSS中赋予.clear{clear:both;}属性即可清理浮动。亦可使用<br class="clear" />或<hr class="clear"/>来进行清理。--》会出现大量冗余，浪费资源 
+2. 方法二：使用CSS的overflow属性给浮动元素的容器添加 overflow:hidden;或 overflow:auto;可以清除浮动，另外在IE6中还需要触发hasLayout，例如为父元素设置容器宽高或设置zoom:1。在添加overflow属性后，浮动元素又回到了容器层，把容器高度撑起，达到了清理浮动的效果。 
+3. 方法三：给浮动的元素的容器添加浮动，给浮动元素的容器也添加上浮动属性即可清除内部浮动，但是这样会使其整体浮动，影响布局，不推荐使用。 
+4. 方法四：使用邻接元素处理什么都不做，给浮动元素后面的元素添加clear属性。 
+5. 方法五：使用CSS的:after伪元素结合:after伪元素（注意这不是伪类，而是伪元素，代表一个元素之后最近的元素）和IEhack，可以完美兼容当前主流的各大浏览器，这里的IEhack指的是触发 hasLayout。给浮动元素的容器添加一个clearfix的class，然后给这个class添加一个:afte伪元素实现元素末尾添加一个看不见的块元素（Block element）清理浮动。
+```
+// 给父级元素的类加一个clearfix的class
+<body>
+  <div class="clearfix">
+   <!-- 浮动模块 -->
+  </div>
+</body>
+div span{
+  display:inline-block;
+  width:25%;
+  float:left;
+}
+.clearfix::after{
+  content:'';
+  display:block;
+  clear:both;
+}
+```
