@@ -1,9 +1,10 @@
+// check
 function Parent() {
     this.name = 'ParentName';
     this.actions = ['sing', 'jump', 'rap'];
 }
 
-function Child() {}
+function Child() { }
 
 Child.prototype = new Parent();
 Child.prototype.constructor = Child;
