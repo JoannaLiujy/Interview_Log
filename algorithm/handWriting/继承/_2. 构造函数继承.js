@@ -14,17 +14,18 @@ function Child() {
 const c1 = new Child('c1', 'red');
 const c2 = new Child('c2', 'white');
 
-console.log(c1.eat === c2.eat);
+console.log(c1.name);
 
-// function Parent(name1, age) {
-//     this.name1 = name1;
+// function Parent(name, age) {
+//     this.name = name;
 //     this.age = age;
 //     this.say = function () {
 //         console.log('hi');
 //     }
 // }
-// function Child(name1, age) {
-//     Parent.call(this, name1, age);
+// function Child() {
+//     Parent.apply(this, arguments);
 // }
-// let c = new Child('c', 12);
-// console.log(c.age);
+// const c1 = new Child('c1', 19);
+// console.log(c1.name);
+// c1.say();
