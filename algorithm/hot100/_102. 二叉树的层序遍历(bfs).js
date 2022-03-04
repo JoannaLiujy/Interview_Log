@@ -19,26 +19,26 @@
 // 链接：https://leetcode-cn.com/problems/binary-tree-level-order-traversal
 
 // bfs
-var levelOrder = function(root) {
-  const ans = [];
-  if (!root) {
-      return ans;
-  }
+var levelOrder = function (root) {
+    const ans = [];
+    if (!root) {
+        return ans;
+    }
 
-  const q = [];
-  q.push(root);
-  while (q.length !== 0) {
-      const currentLevelSize = q.length;
-      ans.push([]);
-      for (let i = 1; i <= currentLevelSize; ++i) {
-          const node = q.shift();
-          ans[ans.length - 1].push(node.val);
-          if (node.left) q.push(node.left);
-          if (node.right) q.push(node.right);
-      }
-  }
-      
-  return ans;
+    const q = [];
+    q.push(root);
+    while (q.length !== 0) {
+        const currentLevelSize = q.length;
+        ans.push([]);
+        for (let i = 1; i <= currentLevelSize; ++i) {
+            const node = q.shift();
+            ans[ans.length - 1].push(node.val);
+            if (node.left) q.push(node.left);
+            if (node.right) q.push(node.right);
+        }
+    }
+
+    return ans;
 };
 
 // 链接：https://leetcode-cn.com/problems/binary-tree-level-order-traversal/solution/er-cha-shu-de-ceng-xu-bian-li-by-leetcode-solution/
