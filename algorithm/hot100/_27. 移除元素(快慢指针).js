@@ -7,10 +7,10 @@
  * @param {number} val
  * @return {number}
  */
- var removeElement = function(nums, val) {
+var removeElement = function (nums, val) {
   let slow = 0
   let fast = 0
-  while(fast < nums.length) {
+  while (fast < nums.length) {
     if (nums[fast] !== val) {
       nums[slow] = nums[fast]
       slow++
@@ -20,3 +20,4 @@
   nums.length = slow
   return slow
 };
+console.log(removeElement([12, 54, 8, 6, 31, 5, 68, 6, 3, 1, 6], 6)); 
