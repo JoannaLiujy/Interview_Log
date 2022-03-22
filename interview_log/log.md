@@ -149,6 +149,7 @@ window.postMessage("字符串","")
 
 ### FBT
 1. **async/await的理解**
+> 是基于promise的简化版异步解决方案
 async函数之前的关键字有两个作用：
 - 使它总是返回一个promise。
 - 允许在其中使用await。
@@ -160,9 +161,23 @@ async/await使我们少写promise.then/catch，但是不要忘记它们是基于
 async 关键字放在函数之前，使得该函数总是返回一个promise对象。如果代码中显式 return 了一个值，那么函数的返回值将会被自动包装成resolved状态下的promise对象
 
 2. **说一下promise**
-
+见ZH第二题
 3. **null和undefined**
-
+```
+console.log(null==undefined);    //true  因为两者都默认转换成了false
+console.log(typeof undefined);    //"undefined"  
+console.log(typeof null);       //"object"  
+console.log(null===undefined);    //false   "==="表示绝对相等，null和undefined类型是不一样的，所以输出“false”
+```
+- null表示没有对象，即该处不应该有值
+1） 作为函数的参数，表示该函数的参数不是对象
+2） 作为对象原型链的终点
+- undefined表示缺少值，用let或var声明但没有初始化
+1）定义了形参，没有传实参，显示undefined
+2）对象属性名不存在时，显示undefined
+3）函数没有写返回值，即没有写return，拿到的是undefined
+4）写了return，但没有赋值，拿到的是undefined
+- null和undefined转换成number数据类型： null 默认转成 0；undefined 默认转成 NaN
 
 ### LQY
 1. 计时器对象
@@ -294,6 +309,7 @@ const arr3 = [...arr,...arr2]; // ['1','2','3','4','5']
 ```
 > 模块化module，import，export
 > promise
+见ZH第二题
 > async/await
 
 2. **了解hooks么？**
@@ -362,7 +378,7 @@ https://blog.csdn.net/m0_37686205/article/details/88776259
 - 但是箭头函数不能同new一起使用，无法创建实例对象；箭头函数没有prototype，就无法让__proto__指向他的构造函数所属的prototype
 
 2. 说说promise
-> 解决回调地狱的异步方案；有三个状态Pending 、Fulfilled、Rejected，状态一旦完成不可逆；有很多方法如then,catch,race,all,finally；他的构造函数式同步的，then方法是异步的
+> 解决回调地狱的异步方案；有三个状态Pending 、Fulfilled、Rejected，状态一旦完成不可逆；有很多实例方法如then,catch,race,all,finally；他的构造函数是同步的，then方法是异步的
 
 ```
 // 实现Promise/A+
@@ -397,7 +413,25 @@ function myPromise(constructor){
 返回值：返回一个Promise实例，这个Promise实例的状态转移取决于参数的Promise实例的状态变化。当参数中所有的实例都处于resolve状态时，返回的Promise实例会变为resolve状态。如果参数中任意一个实例处于reject状态，返回的Promise实例变为reject状态
 
 all 所有Promise的结果都返回resolve才会执行then，返回结果为一个存放所有结果的数组里，如果有任何一个返回reject，则执行catch，如果第一个Promise是有延迟执行的 则会等待执行完才继续
-
+```
+Promise.all = function all(promises) {
+    var promiseNew,
+        results = [],
+        n = 0;
+    promiseNew = new Promise(function (resolve, reject) {
+        promises.forEach(function (promise, index) {
+            promise.then(function (result) {
+                n++;
+                results[index] = result
+                if (n >= promises.length) return resolve(results)
+            }).catch(function (e) {
+                return reject(e)
+            })
+        })
+    })
+    return promiseNew;
+}
+```
 - Promise.race
 参数：接受一个数组，数组内都是Promise实例
 
@@ -424,3 +458,27 @@ Promise.prototype.finally = function (callback) {
   );
 };
 ```
+
+### HKD
+1. **原型和原型链（object、function和Array联系）**
+> 原型：每当定义一个函数数据类型(普通函数、类)时候，都会天生自带一个prototype属性，这个属性指向函数的原型对象，并且这个属性是一个对象数据类型的值。
+> 原型链查找机制：当我们访问对象的一个属性或方法时，它会先在对象自身中寻找，如果有则直接使用，如果没有则会去原型对象中寻找，如果找到则直接使用。如果没有则去原型的原型中寻找,直到找到Object对象的原型，Object对象的原型没有原型，如果在Object原型中依然没有找到，则返回undefined
+> object、function和Array联系
+- 所有的引用类型（数组、对象、函数），
+  + 都具有对象特性，即可自由扩展属性（null除外）
+  + 都有一个__proto__属性，属性值是一个普通的对象
+  + __proto__属性值指向它的构造函数的prototype属性值
+- 所有的函数，都有一个prototype属性，属性值也是一个普通的对象
+
+**扩展：object、function和Array区别**
+typeof object => object
+typeof array => object
+typeof function => function
+
+==>区分object和array的方法
+- Object.prototype.toString.call()
+- .isArray()
+- a instanceof Array
+- constructor
+
+2. **原型继承**
