@@ -481,4 +481,89 @@ typeof function => function
 - a instanceof Array
 - constructor
 
-2. **原型继承**
+2. **继承的多种方式和相应的特点**
+`1.原型链继承`
+```
+Child.prototype = new Parent();
+Child.prototype.constructor = Child;
+```
+- 缺点：
+  + 因为Son.prototype(即原型对象)继承了Parent实例化对象，这就导致了所有Son实例化对象都一样，都共享有原型对象的属性及方法
+  + Son构造函数实例化对象无法进行参数的传递
+`2.构造函数继承`
+```
+CHILD方法中把PARENT当做普通函数执行，让PARENT中的THIS指向CHILD的实例
+```
+- 优点：
+  + 实现实例化对象的独立性；
+  + 还可以给实例化对象添加参数
+- 缺点：
+  + 方法都在构造函数中定义，每次实例化对象都得创建一遍方法，基本无法实现函数复用
+  + call方法仅仅调用了父级构造函数的属性及方法，没有办法调用父级构造函数原型对象的方法
+
+`3.组合继承`
+```
+function Son(name){
+  Parent.call(this,name);
+}
+Son.prototype = new Parent();
+Son.prototype.constructor = Son;
+```
+- 优点：
+  + 利用原型链继承，实现原型对象方法的继承
+  + 利用构造函数继承，实现属性的继承，而且可以传递参数；组合函数基本满足了JS的继承，比较常用
+- 缺点：
+无论什么情况下，都会调用两次父级构造函数：一次是在创建子级原型的时候，另一次是在子级构造函数内部
+
+`4.寄生组合继承`
+```
+function Parent(name, age) {
+  this.name = name;
+  this.age = age;
+}
+Parent.prototype.action = function () {
+  console.log('我是爸爸');
+}
+function Son(charactor) {
+  Parent.call(this);
+  this.charactor = charactor;
+  this.say = function () {
+    console.log(this.name, "是儿子");
+  }
+}
+Son.prototype = Object.create(Parent.prototype);
+Son.prototype.constructor = Son;
+//==>Object.create()不兼容，可以用下面的方法同步
+funtion create(obj){
+  function Fn = {};
+  Fn.prototype = obj;
+  return new Fn();
+}
+```
+
+`5.es6的继承extend`
+```
+//=> ES6基于class创造出来的类不能当做普通函数执行
+class A{
+  constructor(x){
+    this.x = x;
+  }
+  getX(){
+    console.log(this.x);
+  }
+}
+//=>ES6中的继承：class CHILD extends PARENT{} 相当于B.prototype.__proto__ = A.prototype
+class B extends A{
+  constructor(y){
+    //=>子类只要继承父类，可以不写constructor，一旦写了，必须在第一句话写上super()
+    super(200); //=>相当于A.call(this,200),把弗雷昂做普通方法执行，给方法传递参数，让方法中的this是子类的实例
+    // 不写constructor，浏览器回自己默认创建constructor(...args){super(...args)}
+    this.y = y;
+  }
+  getY(){
+    console.log(this.y);
+  }
+}
+let b = new B(100);
+console.log(B);
+```
