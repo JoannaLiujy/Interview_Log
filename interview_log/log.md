@@ -379,10 +379,10 @@ https://blog.csdn.net/m0_37686205/article/details/88776259
 
 2. 说说promise
 > 解决回调地狱的异步方案；有三个状态Pending 、Fulfilled、Rejected，状态一旦完成不可逆；有很多实例方法如then,catch,race,all,finally；他的构造函数是同步的，then方法是异步的
-
+> 参考链接：https://blog.csdn.net/qq_34629352/article/details/104180704?utm_medium=distribute.pc_relevant.none-task-blog-2~default~baidujs_baidulandingword~default-0.pc_relevant_default&spm=1001.2101.3001.4242.1&utm_relevant_index=3
 ```
 // 实现Promise/A+
-function myPromise(constructor){
+function myPromise(excutor){
   let self = this;
   self.status = 'pending';
   self.value = undefined;
@@ -400,12 +400,24 @@ function myPromise(constructor){
     }
   }
   try{
-    constructor(resolve,reject);
+    excutor(resolve,reject);
   }catch(e){
     reject(e);
   }
 }
 
+myPromise.prototype.then=function(onFullfilled,onRejected){
+   let self=this;
+   switch(self.status){
+      case "resolved":
+        onFullfilled(self.value);
+        break;
+      case "rejected":
+        onRejected(self.reason);
+        break;
+      default:       
+   }
+}
 ```
 - Promise.all
 参数：接受一个数组，数组内都是Promise实例
@@ -414,22 +426,22 @@ function myPromise(constructor){
 
 all 所有Promise的结果都返回resolve才会执行then，返回结果为一个存放所有结果的数组里，如果有任何一个返回reject，则执行catch，如果第一个Promise是有延迟执行的 则会等待执行完才继续
 ```
-Promise.all = function all(promises) {
-    var promiseNew,
-        results = [],
-        n = 0;
-    promiseNew = new Promise(function (resolve, reject) {
-        promises.forEach(function (promise, index) {
-            promise.then(function (result) {
-                n++;
-                results[index] = result
-                if (n >= promises.length) return resolve(results)
-            }).catch(function (e) {
-                return reject(e)
-            })
-        })
-    })
-    return promiseNew;
+const all = function (iterable) {
+  return new Promise(function (resolve, reject) {
+    let count = 0, ans = new Array(count)
+    for (const i in iterable) {
+      const v = iterable[i]
+      if (typeof v === 'object' && typeof v.then === 'function') {
+        v.then(function (res) {
+          ans[i] = res
+          if (--count === 0) resolve(ans)
+        }, reject)
+        count++
+      } else {
+        ans[i] = v
+      }
+    }
+  })
 }
 ```
 - Promise.race
@@ -439,12 +451,17 @@ Promise.all = function all(promises) {
 
 race的方法执行结果取决于第一个Promise的返回结果(返回快的那个)，reject则执行catch，resolve则执行then，不会等待定时器的执行，会将定时器时间执行时间短的结果返回
 ```
-const _race = (p)=>{
-	return new Promise((resolve, reject)=>{
-		p.forEach((item)=>{
-			Promise.resolve(item).then(resolve, reject)
-		})
-	})
+const race = function (iterable) {
+  return new Promise(function (resolve, reject) {
+    for (const i in iterable) {
+      const v = iterable[i]
+      if (typeof v === 'object' && typeof v.then === 'function') {
+        v.then(resolve, reject)
+      } else {
+        resolve(v)
+      }
+    }
+  })
 }
 ```
 
@@ -567,3 +584,24 @@ class B extends A{
 let b = new B(100);
 console.log(B);
 ```
+
+### JSXZ
+1. **post和get的区别**
+GET 和 POST 只是 HTTP 协议中两种请求方式；
+https://segmentfault.com/a/1190000018129846
+- 标准
+  + GET 用于获取信息，是无副作用的，是幂等的，且可缓存
+  + POST 用于修改服务器上的数据，有副作用，非幂等，不可缓存
+- 安全
+  + 在传输层面上，两个都不安全，因为他们都是基于TCP/IP应用层的http协议，是使用明文传输的。
+  + 不考虑传输，get没有post安全，get的参数会展示在地址栏，post的参数是存在请求体中的
+
+- 数据类型
+  + GET:只允许 ASCII 字符。
+  + POST:没有限制。也允许二进制数据。
+- 缓存
+HTTP缓存通常只适用于idempotent request（可以理解为查询请求，也就是不更新服务端数据的请求），这也就导致了在HTTP的世界里，一般都是对Get请求做缓存，Post请求很少有缓存
+  + GET:能被缓存。
+  + POST:不能缓存。 
+
+2. **详细说一下CORS**
