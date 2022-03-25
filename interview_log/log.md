@@ -41,9 +41,25 @@ repaint：屏幕的一部分重画，不影响整体布局，比如某个CSS的�
 reflow： 意味着元件的几何尺寸变了，我们需要重新验证并计算渲染树。是渲染树的一部分或全部发生了变化。这就是Reflow，或是Layout。
 有些情况下，比如修改了元素的样式，浏览器并不会立刻 reflow 或 repaint 一次，而是会把这样的操作积攒一批，然后做一次 reflow，这又叫异步 reflow 或增量异步 reflow。
 有些情况下，比如 resize 窗口，改变了页面默认的字体等。对于这些操作，浏览器会马上进行 reflow。
+4. **避免不必要的渲染在什么周期处理**
+shouldComponentUpdate
+5. **类组件生命周期，挂载到完成到卸载**
+- 挂载阶段
+  + constructor：避免将 props 的值复制给 state
+  + componentWillMount
+  + render：react 最重要的步骤，创建虚拟 dom，进行 diff 算法，更新 dom 树都在此进行
+  + componentDidMount
+- 组件更新阶段
+  + componentWillReceiveProps
+  + shouldComponentUpdate
+  + componentWillUpdate
+  + render
+  + componentDidUpdate
+- 卸载阶段
+  + componentWillUnMount
 
 
-### Me..A..
+### MTAPP
 1. 说一下最近负责的项目
 2. 优化方面有没有考虑过把项目进行拆分
 3. **从开发到上线的多人协作过程（git）**
@@ -129,6 +145,11 @@ window.postMessage("字符串","")
 注意：react中跨域
 安装http-proxy-middleware，在package.json中配置
 使用mock也是跨域的一种
+
+### DDRC
+1. **HTTP请求是可靠的么？如何确定数据不丢失？**
+- HTTP是属于应用层的协议，TCP（传输控制协议）和UDP（用户数据报协议）是属于传输层的协议。我们都知道TCP协议是面向连接的，每次进行连接都要进行三次握手和四次挥手，所以它的连接是可靠的。而HTTP是在TCP上层的协议，所以它也是可靠的。但他是不安全的（明文传输）
+- 重传
 
 ### CZ
 1. **类组件和函数式组件的区别？**
@@ -347,6 +368,28 @@ function Todos() {
   // ...
 
 ```
+#### 类组件和函数式组件的区别
+1. 函数式组件一般用于比较简单的组件定义，类组件用于复杂的组件定义
+2. 函数组件中的this是undefined，类组件中的this指向的是当前组件的实例对象
+3. 函数组件是一个纯函数，它接收一个props对象返回一个react元素；而类组件需要去继承React.Component并且创建render函数返回react元素。
+4. 函数组件没有生命周期和状态state，而类组件有。
+5. 你不能在函数组件中使用生命周期钩子，原因和不能使用state一样，所有的生命周期钩子都来自于继承的React.Component中。
+6. 函数组件ReactDOM.render的过程：
+```
+执行了ReactDOM.render(<MyComponent/>.......之后，发生了什么？
+        1.React解析组件标签，找到了MyComponent组件。
+        2.发现组件是使用函数定义的，随后调用该函数，将返回的虚拟DOM转为真实DOM，随后呈现在页面中。
+```
+类组件中ReactDOM.render的过程：
+```
+执行了ReactDOM.render(<MyComponent/>.......之后，发生了什么？
+        1.React解析组件标签，找到MyComponent组件。
+        2.发现组件是使用类定义的，随后new出来该类的实例，并通过该实例调用到原型上的render方法。
+        3.将render返回的虚拟DOM转为真实的DOM，随后呈现在页面中
+```
+
+#### 生命周期
+
 #### hook的使用
 > Hook 在 class 内部是不起作用的。但你可以使用它们来取代 class
 1. 
@@ -584,6 +627,9 @@ class B extends A{
 let b = new B(100);
 console.log(B);
 ```
+3. **vite为什么比webpack快**
+https://new.qq.com/omn/20211213/20211213A08W2F00.html
+
 
 ### JSXZ
 1. **post和get的区别**
@@ -605,3 +651,9 @@ HTTP缓存通常只适用于idempotent request（可以理解为查询请求，�
   + POST:不能缓存。 
 
 2. **详细说一下CORS**
+- 含义： 跨域资源共享
+- 配置： 服务器端 Access-Control-Allow-Origin（必含） – 允许的域名，只能填 *（通配符）或者单域名
+- CORS 跨域的判定流程：
+  + 浏览器先根据同源策略对前端页面和后台交互地址做匹配，若同源，则直接发送数据请求；若不同源，则发送跨域请求
+  + 服务器收到浏览器跨域请求后，根据自身配置返回对应文件头。若未配置过任何允许跨域，则文件头里不包含 Access-Control-Allow-origin 字段，若配置过域名，则返回 Access-Control-Allow-origin + 对应配置规则里的域名的方式。
+  + 浏览器根据接受到的 响应头里的 Access-Control-Allow-origin 字段做匹配，若无该字段，说明不允许跨域，从而抛出一个错误；若有该字段，则对字段内容和当前域名做比对，如果同源，则说明可以跨域，浏览器接受该响应；若不同源，则说明该域名不可跨域，浏览器不接受该响应，并抛出一个错误
