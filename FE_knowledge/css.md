@@ -153,9 +153,9 @@ Animation和transition大部分属性是相同的，他们都是随时间改变�
   + css3有兼容性问题
 
 #### 9.说一下块元素和行元素
-> 块元素：独占一行，并且有自动填满父元素，可以设置margin和pading以及高度和宽度
+> 块元素：独占一行，其前后都会有换行符，并且有自动填满父元素，可以设置margin和pading以及高度和宽度
 - div p h1-h6 ul ol li form table header footer aside section
-> 行元素：不会独占一行，width和height会失效，并且在垂直方向的padding和margin会失效
+> 行元素：不会独占一行，前后无换行符，width和height会失效，并且在垂直方向的padding和margin会失效
 - span img a b q i button input label 
 
 #### 10.多行元素的文本省略号
@@ -177,11 +177,12 @@ Animation和transition大部分属性是相同的，他们都是随时间改变�
 }
 ```
 
-#### 11.visibility=hidden, opacity=0，display:none
+#### 11.隐藏元素
 - opacity=0，该元素隐藏起来了，但不会改变页面布局，并且，如果该元素已经绑定一些事件，如 click 事件，那么点击该区域，也能触发点击事件
 - visibility=hidden，该元素隐藏起来了，但不会改变页面布局，但是不会触发该元素已经绑定的事件
 - display=none，把元素隐藏起来，并且会改变页面布局，可以理解成在页面中把该元素删除掉一样
-
+- position移到外部
+- z-index 涂层遮盖
 #### 12.line-height和height的区别
 line-height 一般是指布局里面一段文字上下行之间的高度，是针对字体来设置的，height 一般是指容器的整体高度。
 
@@ -233,3 +234,72 @@ div span{
   clear:both;
 }
 ```
+#### 17.css3新特性
+1. CSS3边框：
+- border-radius：CSS3圆角边框。在CSS2中添加圆角矩形需要技巧，我们必须为每个圆角使用不同的图片，在CSS3中，创建圆角是非常容易的，在CSS3中，border-radius属性用于创建圆角。
+- box-shadow：CSS3边框阴影。用于向方框添加阴影。
+- border-image：CSS3边框图片。可以使用图片来创建边框。
+2. CSS3背景：
+- background-size：属性规定背景图片的尺寸。在 CSS3 之前，背景图片的尺寸是由图片的实际尺寸决定的。能够以像素或百分比规定尺寸。如果以百分比规定尺寸，那么尺寸相对于父元素的宽度和高度。
+- background-origin：属性规定背景图片的定位区域。背景图片可以放置于content-box、padding-box或border-box区域。
+3. CSS3文字效果：
+- text-shadow：在 CSS3 中，text-shadow 可向文本应用阴影。
+- word-wrap :单词太长的话就可能无法超出某个区域，允许对长单词进行拆分，并换行到下一行：p{word-wrap:break-word;}
+4. CSS3 2D转换：
+- transform：通过 CSS3 转换，我们能够对元素进行移动、缩放、转动、拉长或拉伸。
+  + translate()：元素从其当前位置移动，根据给定的left（x 坐标）和top（y 坐标）位置参数：transform：translate（50px,100px）;
+  + rotate()：元素顺时针旋转给定的角度。允许负值，元素将逆时针旋转。transform:rotate(30deg);
+  + scale():元素的尺寸会增加或减少，根据给定的宽度（X 轴）和高度（Y 轴）参数：transform:scale(2,4);值 scale(2,4) 把宽度转换为原始尺寸的 2 倍，把高度转换为原始高度的 4 倍。
+5. CSS3 3D转换：
+- rotateX()：元素围绕其 X 轴以给定的度数进行旋转。transform：rotateX(120deg);
+- rotateY()：元素围绕其 Y 轴以给定的度数进行旋转。transform：rotateY(120deg);
+6. CSS3过渡：当元素从一种样式变换为另一种样式时为元素添加效果。
+7. CSS3动画：创建动画，这可以在许多网页中取代动画图片、Flash动画以及JavaScript。
+8. CSS3多列：
+- column-count：属性规定元素应该被分隔的列数。
+- column-gap：属性规定列之间的间隔。
+- column-rule ：属性设置列之间的宽度、样式和颜色规则。
+9. CSS3用户界面：
+- resize：属性规定是否可由用户调整元素尺寸。
+- box-sizing：属性允许您以确切的方式定义适应某个区域的具体内容。
+- outline-offset：属性对轮廓进行偏移，并在超出边框边缘的位置绘制轮廓。
+
+#### 18.CSS选择器有哪些，优先级呢
+id选择器，class选择器，标签选择器，相邻选择器，子选择器，后代选择器，通配符选择器，属性选择器，伪元素选择器，伪类选择器等
+- 同一元素引用了多个样式时，排在后面的样式属性的优先级高；
+- 样式选择器的类型不同时，优先级顺序为：id选择器 > class选择器 > 标签选择器； 
+- 标签之间存在层级包含关系时，后代元素会继承祖先元素的样式。如果后代元素定义了与祖先元素相同的样式，则祖先元素的相同的样式属性会被覆盖。继承的样式的优先级比较低，至少比标签选择器的优先级低； 
+- 带有!important 标记的样式属性的优先级最高；!important>行内样式>id>c类、属性、伪类>标签>通配符>继承 
+- 样式表的来源不同时，优先级顺序为：内联样式> 内部样式 > 外部样式 > 浏览器用户自定义样式 > 浏览器默认样式
+
+#### 19.float的元素，display是什么
+block
+
+#### 20.css动画如何实现
+创建动画序列，需要使用animation属性或其子属性，该属性允许配置动画时间、时长以及其他动画细节，但该属性不能配置动画的实际表现，动画的实际表现是由@keyframes规则实现，具体情况参见使用keyframes定义动画序列小节部分。transition也可实现动画。transition强调过渡，是元素的一个或多个属性发生变化时产生的过渡效果，同一个元素通过两个不同的途径获取样式，而第二个途径当某种改变发生（例如 hover）时才能获取样式，这样就会产生过渡动画。
+
+#### 21.三栏布局的实现方式，尽可能多写，浮动布局时，三个 div的生成顺序有没有影响
+两列定宽一列自适应： 
+1、使用 float+margin： 给 div 设置 float：left，left 的 div 添加属性 margin-right：left 和 center 的间隔 px,right 的 div 添加属性 margin-left：left 和 center 的宽度之和加上间隔 
+2、使用 float+overflow： 给 div 设置 float：left，再给 right 的 div 设置 overflow:hidden。这样子两个盒子浮动，另 一个盒子触发 bfc 达到自适应 
+3、使用 position： 父级 div 设置 position：relative，三个子级 div 设置 position：absolute，这个要计算好盒 子的宽度和间隔去设置位置，兼容性比较好， 
+4、使用 table 实现： 父级 div 设置 display：table，设置 border-spacing：10px//设置间距，取值随意,子级 div 设置 display:table-cell，这种方法兼容性好，适用于高度宽度未知的情况，但是 margin 失效，设计间隔比较麻烦， 
+5、flex 实现： parent 的 div 设置 display：flex；left 和 center 的 div 设置 margin-right；然后 right 的 div 设置 flex：1；这样子 right 自适应，但是 flex 的兼容性不好 
+6、grid 实现： parent 的 div 设置 display：grid，设置 grid-template-columns 属性，固定第一列第二列宽 度，第三列 auto， 
+对于两侧定宽中间自适应的布局，对于这种布局需要把 center 放在前面，可以采用双飞 翼布局：圣杯布局，来实现，也可以使用上述方法中的 grid，table，flex，position 实现
+
+#### 22.css布局
+六种布局方式总结：圣杯布局、双飞翼布局、Flex 布局、绝对定位布局、表格布局、网 格布局。 圣杯布局是指布局从上到下分为 header、container、footer，然后 container 部分定为三栏 布局。这种布局方式同样分为 header、container、footer。圣杯布局的缺陷在于 center 是 在 container 的 padding 中的，因此宽度小的时候会出现混乱。 双飞翼布局给 center 部分包裹了一个 main 通过设置 margin 主动地把页面撑开。 Flex 布局是由 CSS3 提供的一种方便的布局方式。 绝对定位布局是给 container 设置 position: relative 和 overflow: hidden，因为绝对定位的元 素的参照物为第一个 postion 不为 static 的祖先元素。 left 向左浮动，right 向右浮动。 center 使用绝对定位，通过设置 left 和 right 并把两边撑开。 center 设置 top: 0 和 bottom: 0 使其高度撑开。 表格布局的好处是能使三栏的高度统一。 网格布局可能是最强大的布局方式了，使用起来极其方便，但目前而言，兼容性并不好。 网格布局，可以将页面分割成多个区域，或者用来定义内部元素的大小，位置，图层关 系。
+
+#### 23.overflow 的原理
+要讲清楚这个解决方案的原理，首先需要了解块格式化上下文，A block formatting context is a part of a visual CSS rendering of a Web page. It is the region in which the layout of block boxes occurs and in which floats interact with each other.翻译过来就是块格式化上下文是 CSS 可视化渲染的一部分，它是一块区域，规定了内部块盒 的渲染方式，以及浮动相 互之间的影响关系 当元素设置了 overflow 样式且值部位 visible 时，该元素就构建了一个 BFC，BFC 在计算 高度时，内部浮动元素的高度也要计算在内，也就是说技术 BFC 区域内只有一个浮动 元素，BFC 的高度也不会发生塌缩，所以达到了清除浮动的目的
+
+#### 24.CSS画正方体，三角形
+
+#### 25.用css实现一个硬币旋转的效果
+
+#### 26.z-index的定位方法
+z-index 属性设置元素的堆叠顺序，拥有更好堆叠顺序的元素会处于较低顺序元素之前， z-index 可以为负，且 z-index 只能在定位元素上奏效，该属性设置一个定位元素沿 z 轴的位置，如果为正数，离用户越近，为负数，离用户越远，它的属性值有 auto，默认， 堆叠顺序与父元素相等，number，inherit，从父元素继承 z-index 属性的值
+
+#### 27.display：table 和本身的 table 有什么区别
+Display:table 和本身 table 是相对应的，区别在于，display：table 的 css 声明能够让一个 html 元素和它的子节点像 table 元素一样，使用基于表格的 css 布局，是我们能够轻松定 义一个单元格的边界，背景等样式，而不会产生因为使用了 table 那样的制表标签导致 的语义化问题。 之所以现在逐渐淘汰了 table 系表格元素，是因为用 div+css 编写出来的文件比用 table 边写出来的文件小，而且 table 必须在页面完全加载后才显示，div 则是逐行显示，table 的嵌套性太多，没有 div 简洁
